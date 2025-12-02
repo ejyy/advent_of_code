@@ -1,29 +1,35 @@
-def dial(initial_idx, rotation, dial_range=100):
-    direction = str(rotation[0])
-    delta_value = int(rotation[1:])
-    delta = -delta_value if direction == "L" else delta_value
+part1 = 0
+part2 = 0
 
-    total_delta = initial_idx + delta
+# Parse the input file, line by line
+input = [line.strip() for line in open("day_01_input.txt", 'r')]
 
-    next_index = total_delta % dial_range
+# The dial's starting position is 50
+current_position = 50
 
-    crosses_zero = abs(total_delta // dial_range)
+for line in input:
+    # Extract the direction (ie. L50 -> L)
+    direction = str(line[0])
 
-    return next_index, crosses_zero
+    # Extract the magnitude (ie. L50 -> 50)
+    magnitude = int(line[1:])
 
-with open("day_01_input.txt") as file:
-    times_rest_on_zero = 0
-    times_crosses_zero = 0
+    # Left is negative, right is positive
+    magnitude = -magnitude if direction == "L" else magnitude
 
-    starting_idx = 50
+    # Difference based on instruction magnitude relative to current position
+    total_delta = current_position + magnitude
 
-    for line in file:
-        starting_idx, crosses_zero = dial(starting_idx, line.strip())
+    # Modulo function (remainder of division) for new dial index
+    current_position = total_delta % 100
 
-        if starting_idx == 0:
-            times_rest_on_zero += 1
+    # If 'rests' on 0 after the instruction, increment part1
+    if current_position == 0:
+        part1 += 1
 
-        times_crosses_zero += crosses_zero
+    # Number of 'revolutions' around the dial face
+    part2 += abs(total_delta // 100)
+    # TODO: Need to catch some edge cases here, likely due to stopping not crossing 0
 
-print("Part 1:", times_rest_on_zero)
-print("Part 2:", times_crosses_zero)
+print("Part 1:", part1)
+print("Part 2:", part2)
