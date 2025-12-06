@@ -2,7 +2,7 @@ part1 = 0
 part2 = 0
 
 # Parse the input file, line by line
-input = [line.strip().split() for line in open("day_06_test.txt", 'r')]
+input = [line.strip().split() for line in open("day_06_input.txt", 'r')]
 
 import numpy as np
 import math
