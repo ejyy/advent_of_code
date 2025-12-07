@@ -2,12 +2,15 @@ part1 = 0
 part2 = 0
 
 # Parse the input file, line by line
-input = [list(line.strip()) for line in open("day_07_test.txt", 'r')]
+input = [list(line.strip()) for line in open("day_07_input.txt", 'r')]
 
 from collections import deque
 
 # Use a double-ended queue to store all 'current positions'
 current_positions = deque()
+
+# Track visited positions to avoid reprocessing
+visited = set()
 
 # Find starting point ("S")
 for row_k, row_v in enumerate(input):
@@ -15,6 +18,7 @@ for row_k, row_v in enumerate(input):
     for column_k, column_v in enumerate(row_v):
         if column_v == "S":
             current_positions.append((row_k, column_k))
+            visited.add((row_k, column_k))
 
 while True:
     # A new double_ended queue to store updates
@@ -30,6 +34,11 @@ while True:
 
         # Attempt to move directly downwards
         new_x, new_y = x + 1, y
+
+        # Skip if already visited
+        if (new_x, new_y) in visited:
+            continue
+        visited.add((new_x, new_y))
 
         # Bounds checking of new position head
         if new_x < 0 or new_x >= len(input) or new_y < 0 or new_y >= len(input[0]):
@@ -72,9 +81,9 @@ while True:
     # Append number of unique splits
     part1 += len(unique_splits)
 
-# Pretty print the grid
-for line in input:
-    print("".join(line))
+# # Pretty print the grid
+# for line in input:
+#     print("".join(line))
 
 print("Part 1:", part1)
 print("Part 2:", part2)
